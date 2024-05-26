@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:libreria/screens/library_page.dart';
 import 'package:libreria/screens/search_page.dart';
+import 'package:libreria/services/database_helper.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().database;
   runApp(const MyApp());
 }
 
