@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/services/api.dart';
+import 'package:libreria/widget/books_list.dart';
+import 'package:libreria/widget/search_bar.dart';
+import 'package:libreria/services/camera.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -30,7 +33,27 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Column(
         children: [
-
+          MySearchBar(
+            controller: _controller,
+            onSearch: () {
+              search(_controller.text);
+              setState(() {
+                _hasSearched = true;
+              });
+            },
+            onScan: () => scanBarcode(context),
+            searchByTitle: _searchByTitle,
+            onSearchModeChanged: (value) {
+              setState(() {
+                _searchByTitle = value;
+              });
+            },
+          ),
+          Expanded(
+            child: _books == null
+                ? Container()
+                : SearchBooksList(books: _books!, hasSearched: _hasSearched,),
+          ),
         ],
       ),
     );
