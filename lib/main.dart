@@ -5,8 +5,8 @@ import 'package:libreria/services/database_helper.dart';
 import 'package:libreria/widgets/settings_menu.dart';
 
 Future<void> main() async {
-  //WidgetsFlutterBinding.ensureInitialized();
-  //await DatabaseHelper().database;
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().database;
   runApp(const MyApp());
 }
 
