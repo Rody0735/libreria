@@ -133,7 +133,7 @@ class _LibraryPageState extends State<LibraryPage> {
           Expanded(
             child: BooksList(
               booksFuture: _books,
-              onBookRemoved: _onBookRemoved,
+              onBookChange: _onBookRemoved,
             ),
           ),
         ],

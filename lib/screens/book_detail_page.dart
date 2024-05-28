@@ -60,7 +60,6 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
             ),
           ),
           Container(
-            color: Colors.white,
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: isInLibrary
@@ -86,7 +85,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 12),
                         ),
-                        child: const Text('Rimuovi dalla libreria'),
+                        child: const Text('Remove from Library'),
                       ),
                     ],
                   )
@@ -97,7 +96,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                       ),
-                      child: const Text('Aggiungi alla libreria'),
+                      child: const Text('Add to Library'),
                     ),
                   ),
           ),

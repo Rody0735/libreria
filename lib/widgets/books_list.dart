@@ -38,7 +38,7 @@ class _SearchBooksListState extends State<SearchBooksList> {
     return BooksList(
       booksFuture: _books,
       hasSearched: widget.hasSearched,
-      onBookRemoved: _refreshBooks,
+      onBookChange: _refreshBooks,
     );
   }
 }
@@ -46,12 +46,12 @@ class _SearchBooksListState extends State<SearchBooksList> {
 class BooksList extends StatelessWidget {
   final Future<List<Book>> booksFuture;
   final bool? hasSearched;
-  final VoidCallback onBookRemoved;
+  final VoidCallback onBookChange;
 
   const BooksList({
     Key? key,
     required this.booksFuture,
-    required this.onBookRemoved,
+    required this.onBookChange,
     this.hasSearched,
   }) : super(key: key);
 
@@ -78,34 +78,24 @@ class BooksList extends StatelessWidget {
           );
         } else {
           final books = snapshot.data!;
-          final groupedBooks = groupBy(books, (Book book) => book.authors.isNotEmpty ? book.authors[0][0].toUpperCase() : '');
+          final groupedBooks = groupBy(
+              books,
+              (Book book) => book.authors.isNotEmpty
+                  ? book.authors[0][0].toUpperCase()
+                  : '');
 
           return ListView.builder(
             itemCount: groupedBooks.length,
             itemBuilder: (context, index) {
-              final letter = groupedBooks.keys.elementAt(index);
-              final booksByLetter = groupedBooks[letter]!;
-
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      letter,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                  ...booksByLetter.map((book) {
+                  ...books.map((book) {
                     return BookListItem(
                       book: book,
-                      onBookRemoved: onBookRemoved,
+                      onBookChange: onBookChange,
                     );
-                  }).toList(),
+                  }),
                 ],
               );
             },
@@ -118,12 +108,12 @@ class BooksList extends StatelessWidget {
 
 class BookListItem extends StatelessWidget {
   final Book book;
-  final VoidCallback onBookRemoved;
+  final VoidCallback onBookChange;
 
   const BookListItem({
     Key? key,
     required this.book,
-    required this.onBookRemoved,
+    required this.onBookChange,
   }) : super(key: key);
 
   @override
@@ -139,16 +129,16 @@ class BookListItem extends StatelessWidget {
               height: 100,
               child: book.imageLinks != null && book.imageLinks!.isNotEmpty
                   ? Image.network(
-                book.imageLinks!.values.first.toString(),
-                fit: BoxFit.contain,
-              )
+                      book.imageLinks!.values.first.toString(),
+                      fit: BoxFit.contain,
+                    )
                   : const Center(
-                child: Icon(
-                  Icons.book,
-                  size: 70,
-                  color: Colors.grey,
-                ),
-              ),
+                      child: Icon(
+                        Icons.book,
+                        size: 70,
+                        color: Colors.grey,
+                      ),
+                    ),
             ),
             title: Text(
               book.title,
@@ -168,7 +158,7 @@ class BookListItem extends StatelessWidget {
                 ),
               );
               if (result == true) {
-                onBookRemoved();
+                onBookChange();
               }
             },
           ),
