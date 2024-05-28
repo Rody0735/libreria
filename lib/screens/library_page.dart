@@ -117,11 +117,11 @@ class _LibraryPageState extends State<LibraryPage> {
                       ),
                       const PopupMenuItem(
                         value: 'author',
-                        child: Text('Autore'),
+                        child: Text('Author'),
                       ),
                       const PopupMenuItem(
                         value: 'favorites',
-                        child: Text('Preferiti'),
+                        child: Text('Favorite'),
                       ),
                     ];
                   },
@@ -134,6 +134,7 @@ class _LibraryPageState extends State<LibraryPage> {
             child: BooksList(
               booksFuture: _books,
               onBookChange: _onBookRemoved,
+              sortOrder: _sortOrder,
             ),
           ),
         ],

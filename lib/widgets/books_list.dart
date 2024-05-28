@@ -46,6 +46,7 @@ class _SearchBooksListState extends State<SearchBooksList> {
 class BooksList extends StatelessWidget {
   final Future<List<Book>> booksFuture;
   final bool? hasSearched;
+  final String? sortOrder;
   final VoidCallback onBookChange;
 
   const BooksList({
@@ -53,6 +54,7 @@ class BooksList extends StatelessWidget {
     required this.booksFuture,
     required this.onBookChange,
     this.hasSearched,
+    this.sortOrder,
   }) : super(key: key);
 
   @override
@@ -70,41 +72,66 @@ class BooksList extends StatelessWidget {
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(
+          return const Center(
             child: Text(
-              hasSearched == true ? 'No books found' : '',
-              style: const TextStyle(fontSize: 18),
+              'No books found',
+              style: TextStyle(fontSize: 18),
             ),
           );
         } else {
           final books = snapshot.data!;
-          final groupedBooks = groupBy(
-              books,
-              (Book book) => book.authors.isNotEmpty
-                  ? book.authors[0][0].toUpperCase()
-                  : '');
-
-          return ListView.builder(
-            itemCount: groupedBooks.length,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...books.map((book) {
-                    return BookListItem(
-                      book: book,
-                      onBookChange: onBookChange,
-                    );
-                  }),
-                ],
-              );
-            },
-          );
+          if (sortOrder == 'author') {
+            final groupedBooks = groupBy(
+                books,
+                    (Book book) => book.authors.isNotEmpty
+                    ? book.authors[0][0].toUpperCase()
+                    : '');
+            final sortedKeys = groupedBooks.keys.toList()..sort();
+            return ListView.builder(
+              itemCount: sortedKeys.length,
+              itemBuilder: (context, index) {
+                final key = sortedKeys[index];
+                final groupedBooksByKey = groupedBooks[key]!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        key,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    ...groupedBooksByKey.map((book) {
+                      return BookListItem(
+                        book: book,
+                        onBookChange: onBookChange,
+                      );
+                    }),
+                  ],
+                );
+              },
+            );
+          } else {
+            return ListView.builder(
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                return BookListItem(
+                  book: books[index],
+                  onBookChange: onBookChange,
+                );
+              },
+            );
+          }
         }
       },
     );
   }
 }
+
 
 class BookListItem extends StatelessWidget {
   final Book book;
