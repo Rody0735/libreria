@@ -2,30 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:libreria/screens/library_page.dart';
 import 'package:libreria/screens/search_page.dart';
 import 'package:libreria/services/database_helper.dart';
+import 'package:libreria/widgets/settings_menu.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper().database;
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await DatabaseHelper().database;
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isDarkTheme = false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Library App',
       theme: ThemeData().copyWith(
-        colorScheme:
-        ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 213, 235, 234),),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 213, 235, 234),
+          brightness: Brightness.light,
+        ),
       ),
-      home: MainPage(),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 0, 76, 76),
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: _isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+      home: MainPage(
+        toggleTheme: () {
+          setState(() {
+            _isDarkTheme = !_isDarkTheme;
+          });
+        },
+        isDarkTheme: _isDarkTheme,
+      ),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
+  final VoidCallback toggleTheme;
+  final bool isDarkTheme;
+
+  const MainPage({Key? key, required this.toggleTheme, required this.isDarkTheme}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -44,6 +73,33 @@ class _MainPageState extends State<MainPage> {
     _pageController.jumpToPage(index);
   }
 
+  void _showClearMemoryDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Clear Memory'),
+          content: const Text('Are you sure you want to clear memory?'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await DatabaseHelper().clearDatabase();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -53,6 +109,18 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(_selectedIndex == 1 ? 'Library' : 'Search'),
+        ),
+        actions: [
+          SettingsMenu(
+            toggleTheme: widget.toggleTheme,
+            isDarkTheme: widget.isDarkTheme,
+            showClearMemoryDialog: _showClearMemoryDialog,
+          ),
+        ],
+      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,

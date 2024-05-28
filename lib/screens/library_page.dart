@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/services/database_helper.dart';
-import 'package:libreria/widget/books_list.dart';
+import 'package:libreria/widgets/books_list.dart';
 
 class LibraryPage extends StatefulWidget {
   @override
@@ -79,19 +79,6 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text('Library'),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-
-            },
-          ),
-        ],
-      ),
       body: Column(
         children: [
           Padding(

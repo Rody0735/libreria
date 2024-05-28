@@ -1,8 +1,8 @@
+import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'package:libreria/models/book.dart';
 
 class DatabaseHelper {
@@ -74,5 +74,10 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<void> clearDatabase() async {
+    final db = await database;
+    await db.delete('books');
   }
 }

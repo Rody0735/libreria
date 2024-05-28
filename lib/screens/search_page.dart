@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/services/api.dart';
-import 'package:libreria/widget/books_list.dart';
-import 'package:libreria/widget/search_bar.dart';
+import 'package:libreria/widgets/books_list.dart';
+import 'package:libreria/widgets/search_bar.dart';
 import 'package:libreria/services/camera.dart';
 
 class SearchPage extends StatefulWidget {
@@ -26,11 +26,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text('Search'),
-        ),
-      ),
       body: Column(
         children: [
           MySearchBar(

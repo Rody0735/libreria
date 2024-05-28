@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/services/database_helper.dart';
-import 'package:libreria/widget/book_detail.dart';
+import 'package:libreria/widgets/book_detail.dart';
 
 class BookDetailsPage extends StatefulWidget {
   final Book book;
