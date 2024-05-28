@@ -100,19 +100,10 @@ class _LibraryPageState extends State<LibraryPage> {
                   ),
                 ),
 
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
                 PopupMenuButton<String>(
                   onSelected: _onSortOrderChanged,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.filter_list,
-                    color: Colors.black.withOpacity(0.6),
                   ),
                   itemBuilder: (BuildContext context) {
                     return [
@@ -138,6 +129,7 @@ class _LibraryPageState extends State<LibraryPage> {
               ],
             ),
           ),
+
           Expanded(
             child: BooksList(
               booksFuture: _books,
