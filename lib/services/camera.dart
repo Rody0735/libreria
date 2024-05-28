@@ -5,8 +5,6 @@ import 'package:libreria/models/book.dart';
 import 'package:libreria/screens/book_detail_page.dart';
 import 'package:libreria/services/api.dart';
 
-import '../screens/search_page.dart';
-
 Future<void> scanBarcode(BuildContext context) async {
   var status = await Permission.camera.request();
   if (status.isGranted) {
@@ -18,12 +16,11 @@ Future<void> scanBarcode(BuildContext context) async {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookDetailsPage(book: book),
+              builder: (context) =>
+                  BookDetailsPage(bookFuture: Future.value(book)),
             ),
           );
-        } else {
-
-        }
+        } else {}
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
