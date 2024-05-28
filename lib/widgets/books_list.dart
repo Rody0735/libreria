@@ -180,7 +180,8 @@ class BookListItem extends StatelessWidget {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BookDetailsPage(book: book),
+                  builder: (context) =>
+                      BookDetailsPage(bookFuture: Future.value(book)),
                 ),
               );
               if (result == true) {
