@@ -24,16 +24,22 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Library App',
-      theme: ThemeData().copyWith(
+      theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 213, 235, 234),
           brightness: Brightness.light,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.black),
         ),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 0, 76, 76),
           brightness: Brightness.dark,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
         ),
       ),
       themeMode: _isDarkTheme ? ThemeMode.dark : ThemeMode.light,
@@ -125,7 +131,7 @@ class _MainPageState extends State<MainPage> {
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: [
-          SearchPage(),
+          const SearchPage(),
           LibraryPage(),
         ],
       ),

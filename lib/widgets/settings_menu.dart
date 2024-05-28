@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SettingsMenu extends StatelessWidget {
   final VoidCallback toggleTheme;
-  final bool isDarkTheme;
+  bool isDarkTheme;
   final VoidCallback showClearMemoryDialog;
 
-  const SettingsMenu({
+  SettingsMenu({
     Key? key,
     required this.toggleTheme,
     required this.isDarkTheme,
@@ -24,27 +24,28 @@ class SettingsMenu extends StatelessWidget {
         return [
           PopupMenuItem(
             value: 'theme',
-            child: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Dark Theme', style: TextStyle(fontSize: 18.0, color: Theme.of(context).textTheme.bodyLarge?.color)),
-                    Switch(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Dark Theme', style: TextStyle(fontSize: 18.0),),
+                StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Switch(
                       value: isDarkTheme,
                       onChanged: (bool value) {
+                        isDarkTheme = ! isDarkTheme;
                         toggleTheme();
                         setState(() {});
                       },
-                    ),
-                  ],
-                );
-              },
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: 'clear',
-            child: Text('Clear Memory', style: TextStyle(fontSize: 18.0, color: Theme.of(context).textTheme.bodyLarge?.color)),
+            child: Text('Clear Memory', style: TextStyle(fontSize: 18.0),),
           ),
         ];
       },
