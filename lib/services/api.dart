@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:libreria/models/book.dart';
 
-
 const String standardApi = 'https://www.googleapis.com/books/v1/volumes?q=';
 
 Future<List<Book>> searchBooks(String title, bool? intitle) async {
@@ -25,8 +24,6 @@ Future<List<Book>> searchBooks(String title, bool? intitle) async {
   return books;
 }
 
-
-
 Future<Book> searchBooksFromId(String id) async {
   var queryUrl = '$standardApi$id';
 
@@ -43,9 +40,8 @@ Future<Book> searchBooksFromId(String id) async {
   return book;
 }
 
-
 Future<Book?> searchBookByISBN(String isbn) async {
-  var queryUrl = '$standardApi''isbn:$isbn';
+  var queryUrl = '$standardApi' 'isbn:$isbn';
 
   Book? book;
 
@@ -61,7 +57,6 @@ Future<Book?> searchBookByISBN(String isbn) async {
 
   return book;
 }
-
 
 class BookNotFoundException implements Exception {}
 

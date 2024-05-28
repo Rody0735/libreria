@@ -59,7 +59,9 @@ class MainPage extends StatefulWidget {
   final VoidCallback toggleTheme;
   final bool isDarkTheme;
 
-  const MainPage({Key? key, required this.toggleTheme, required this.isDarkTheme}) : super(key: key);
+  const MainPage(
+      {Key? key, required this.toggleTheme, required this.isDarkTheme})
+      : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();

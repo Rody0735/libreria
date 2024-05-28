@@ -29,11 +29,11 @@ class Book {
       title: volumeInfo['title'] as String? ?? '',
       subtitle: volumeInfo['subtitle'] as String? ?? '',
       authors: (volumeInfo['authors'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList() ??
+              ?.map((e) => e as String)
+              .toList() ??
           const [],
       imageLinks: (volumeInfo['imageLinks'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, Uri.parse(e as String)),
+        (k, e) => MapEntry(k, Uri.parse(e as String)),
       ),
       description: volumeInfo['description'] as String? ?? '',
       pageCount: (volumeInfo['pageCount'] as num?)?.toInt() ?? 0,
@@ -49,7 +49,10 @@ class Book {
       subtitle: json['subtitle'] as String,
       authors: (json['authors'] as String).split(','),
       imageLinks: json['imageLinks'] != null
-          ? (json['imageLinks'] as String).split(',').asMap().map((i, e) => MapEntry(i.toString(), Uri.parse(e)))
+          ? (json['imageLinks'] as String)
+              .split(',')
+              .asMap()
+              .map((i, e) => MapEntry(i.toString(), Uri.parse(e)))
           : null,
       description: json['description'] as String,
       pageCount: json['pageCount'] as int,
@@ -58,13 +61,13 @@ class Book {
   }
 
   Map<String, dynamic> toDbJson() => <String, dynamic>{
-    'id': id,
-    'title': title,
-    'subtitle': subtitle,
-    'authors': authors.join(','),
-    'imageLinks': imageLinks?.values.map((uri) => uri.toString()).join(','),
-    'description': description,
-    'pageCount': pageCount,
-    'isFavorite': isFavorite ? 1 : 0,
-  };
+        'id': id,
+        'title': title,
+        'subtitle': subtitle,
+        'authors': authors.join(','),
+        'imageLinks': imageLinks?.values.map((uri) => uri.toString()).join(','),
+        'description': description,
+        'pageCount': pageCount,
+        'isFavorite': isFavorite ? 1 : 0,
+      };
 }

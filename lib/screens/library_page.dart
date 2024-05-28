@@ -25,13 +25,13 @@ class _LibraryPageState extends State<LibraryPage> {
         if (_searchQuery.isNotEmpty) {
           books = books
               .where((book) =>
-          book.title
-              .toLowerCase()
-              .contains(_searchQuery.toLowerCase()) ||
-              book.authors
-                  .join(', ')
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()))
+                  book.title
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase()) ||
+                  book.authors
+                      .join(', ')
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase()))
               .toList();
         }
         _sortBooks(books);
@@ -49,14 +49,15 @@ class _LibraryPageState extends State<LibraryPage> {
         books.sort((a, b) => b.title.compareTo(a.title));
         break;
       case 'author':
-        books.sort((a, b) => a.authors.join(', ').compareTo(b.authors.join(', ')));
+        books.sort(
+            (a, b) => a.authors.join(', ').compareTo(b.authors.join(', ')));
         break;
       case 'favorites':
-        books.sort((a, b) => (b.isFavorite ? 1 : 0).compareTo(a.isFavorite ? 1 : 0));
+        books.sort(
+            (a, b) => (b.isFavorite ? 1 : 0).compareTo(a.isFavorite ? 1 : 0));
         break;
     }
   }
-
 
   void _onSearchChanged(String query) {
     setState(() {
@@ -99,7 +100,6 @@ class _LibraryPageState extends State<LibraryPage> {
                     onChanged: _onSearchChanged,
                   ),
                 ),
-
                 PopupMenuButton<String>(
                   onSelected: _onSortOrderChanged,
                   icon: const Icon(
@@ -129,7 +129,6 @@ class _LibraryPageState extends State<LibraryPage> {
               ],
             ),
           ),
-
           Expanded(
             child: BooksList(
               booksFuture: _books,

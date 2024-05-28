@@ -27,13 +27,16 @@ class SettingsMenu extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Dark Theme', style: TextStyle(fontSize: 18.0),),
+                const Text(
+                  'Dark Theme',
+                  style: TextStyle(fontSize: 18.0),
+                ),
                 StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
                     return Switch(
                       value: isDarkTheme,
                       onChanged: (bool value) {
-                        isDarkTheme = ! isDarkTheme;
+                        isDarkTheme = !isDarkTheme;
                         toggleTheme();
                         setState(() {});
                       },
@@ -45,7 +48,10 @@ class SettingsMenu extends StatelessWidget {
           ),
           const PopupMenuItem(
             value: 'clear',
-            child: Text('Clear Memory', style: TextStyle(fontSize: 18.0),),
+            child: Text(
+              'Clear Memory',
+              style: TextStyle(fontSize: 18.0),
+            ),
           ),
         ];
       },

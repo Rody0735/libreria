@@ -7,6 +7,7 @@ import 'package:libreria/models/book.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
+
   factory DatabaseHelper() => _instance;
 
   static Database? _database;
@@ -28,14 +29,14 @@ class DatabaseHelper {
         print("Creating database table...");
         return db.execute(
           'CREATE TABLE books('
-              'id TEXT PRIMARY KEY, '
-              'title TEXT, '
-              'subtitle TEXT, '
-              'authors TEXT, '
-              'imageLinks TEXT, '
-              'description TEXT, '
-              'pageCount INTEGER, '
-              'isFavorite INTEGER)',
+          'id TEXT PRIMARY KEY, '
+          'title TEXT, '
+          'subtitle TEXT, '
+          'authors TEXT, '
+          'imageLinks TEXT, '
+          'description TEXT, '
+          'pageCount INTEGER, '
+          'isFavorite INTEGER)',
         );
       },
       version: 1,

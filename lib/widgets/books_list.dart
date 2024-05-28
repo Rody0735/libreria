@@ -83,7 +83,7 @@ class BooksList extends StatelessWidget {
           if (sortOrder == 'author') {
             final groupedBooks = groupBy(
                 books,
-                    (Book book) => book.authors.isNotEmpty
+                (Book book) => book.authors.isNotEmpty
                     ? book.authors[0][0].toUpperCase()
                     : '');
             final sortedKeys = groupedBooks.keys.toList()..sort();
@@ -131,7 +131,6 @@ class BooksList extends StatelessWidget {
     );
   }
 }
-
 
 class BookListItem extends StatelessWidget {
   final Book book;
