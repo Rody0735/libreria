@@ -23,16 +23,26 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
     super.initState();
     _bookFuture = widget.bookFuture;
     _checkIfInLibrary();
+    _checkIfFavorite();
   }
 
   Future<void> _checkIfInLibrary() async {
     final books = await _databaseHelper.books();
+    final book = await _bookFuture;
     setState(() {
-      isInLibrary = books.any((book) => book.id == widget.bookFuture);
+      isInLibrary = books.any((b) => b.id == book.id);
+    });
+  }
+
+  Future<void> _checkIfFavorite() async {
+    final book = await _bookFuture;
+    setState(() {
+      isFavorite = book.isFavorite;
     });
   }
 
   Future<void> _addToLibrary(Book book) async {
+    book.isFavorite = false;
     await _databaseHelper.insertBook(book);
     setState(() {
       isInLibrary = true;
