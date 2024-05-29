@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:libreria/models/book.dart';
+import 'package:libreria/services/exceptions.dart';
 
 const String standardApi = 'https://www.googleapis.com/books/v1/volumes?q=';
 
@@ -68,9 +69,3 @@ Future<Book?> searchBookByISBN(String isbn) async {
 
   return book;
 }
-
-class BookNotFoundException implements Exception {}
-
-class SearchFailedException implements Exception {}
-
-class OfflineException implements Exception {}

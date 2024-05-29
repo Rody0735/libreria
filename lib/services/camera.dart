@@ -1,4 +1,5 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:libreria/services/exceptions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
@@ -20,12 +21,14 @@ Future<void> scanBarcode(BuildContext context) async {
                   BookDetailsPage(bookFuture: Future.value(book)),
             ),
           );
-        } else {}
+        } else {
+          throw BookNotFoundException();
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Impossibile trovare il libro: $e'),
+        const SnackBar(
+          content: Text('Impossibile trovare il libro'),
         ),
       );
     }

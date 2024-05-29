@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/screens/book_detail_page.dart';
-import 'package:libreria/services/api.dart';
+import 'package:libreria/services/exceptions.dart';
 
 class SearchBooksList extends StatelessWidget {
   final Future<List<Book>> books;
