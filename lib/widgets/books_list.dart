@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/screens/book_detail_page.dart';
+import 'package:libreria/services/api.dart';
 
 class SearchBooksList extends StatelessWidget {
   final Future<List<Book>> books;
@@ -47,10 +48,18 @@ class BooksList extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          String errorMessage;
+          if (snapshot.error is OfflineException) {
+            errorMessage =
+                'No internet connection. Please check your connection and try again.';
+          } else {
+            errorMessage = 'Error: ${snapshot.error}';
+          }
           return Center(
             child: Text(
-              'Error: ${snapshot.error}',
+              errorMessage,
               style: const TextStyle(fontSize: 18, color: Colors.red),
+              textAlign: TextAlign.center,
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -78,7 +87,7 @@ class BooksList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
                         key,
                         style: const TextStyle(

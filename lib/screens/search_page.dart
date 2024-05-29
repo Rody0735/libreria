@@ -53,7 +53,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.topRight,
             color: Theme.of(context).focusColor,
             child: Row(
               children: [

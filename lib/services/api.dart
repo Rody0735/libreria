@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:libreria/models/book.dart';
 
@@ -10,7 +11,8 @@ Future<List<Book>> searchBooks(String title, bool? intitle) async {
 
   final List<Book> books = [];
 
-  await http.get(Uri.parse(queryUrl)).then((result) {
+  try {
+    final result = await http.get(Uri.parse(queryUrl));
     if (result.statusCode == 200) {
       final data = jsonDecode(result.body);
       (data['items'] as List<dynamic>?)?.forEach((item) {
@@ -19,7 +21,9 @@ Future<List<Book>> searchBooks(String title, bool? intitle) async {
     } else {
       throw SearchFailedException();
     }
-  });
+  } on SocketException {
+    throw OfflineException();
+  }
 
   return books;
 }
@@ -29,13 +33,16 @@ Future<Book> searchBooksFromId(String id) async {
 
   late Book book;
 
-  await http.get(Uri.parse(queryUrl)).then((result) {
+  try {
+    final result = await http.get(Uri.parse(queryUrl));
     if (result.statusCode == 200) {
       book = Book.fromJson(jsonDecode(result.body));
     } else {
       throw BookNotFoundException();
     }
-  });
+  } on SocketException {
+    throw OfflineException();
+  }
 
   return book;
 }
@@ -45,14 +52,18 @@ Future<Book?> searchBookByISBN(String isbn) async {
 
   Book? book;
 
-  final response = await http.get(Uri.parse(queryUrl));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    if (data['totalItems'] > 0) {
-      book = Book.fromJson(data['items'][0]);
+  try {
+    final response = await http.get(Uri.parse(queryUrl));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['totalItems'] > 0) {
+        book = Book.fromJson(data['items'][0]);
+      }
+    } else {
+      throw BookNotFoundException();
     }
-  } else {
-    throw BookNotFoundException();
+  } on SocketException {
+    throw OfflineException();
   }
 
   return book;
@@ -61,3 +72,5 @@ Future<Book?> searchBookByISBN(String isbn) async {
 class BookNotFoundException implements Exception {}
 
 class SearchFailedException implements Exception {}
+
+class OfflineException implements Exception {}
