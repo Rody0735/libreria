@@ -75,8 +75,8 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: _books == null
                 ? Container()
-                : SearchBooksList(
-                    books: _books!,
+                : BooksList(
+                    booksFuture: _books!,
                     hasSearched: _hasSearched,
                     onBookChange: _refreshBooks,
                   ),
