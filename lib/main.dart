@@ -133,7 +133,7 @@ class _MainPageState extends State<MainPage> {
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: [
-          const SearchPage(),
+          SearchPage(),
           LibraryPage(),
         ],
       ),

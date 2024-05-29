@@ -33,7 +33,7 @@ Future<Book> searchBooksFromId(String id) async {
     if (result.statusCode == 200) {
       book = Book.fromJson(jsonDecode(result.body));
     } else {
-      throw BookNotFoundException;
+      throw BookNotFoundException();
     }
   });
 

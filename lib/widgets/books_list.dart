@@ -2,43 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/screens/book_detail_page.dart';
-import 'package:libreria/services/database_helper.dart';
 
-class SearchBooksList extends StatefulWidget {
+class SearchBooksList extends StatelessWidget {
   final Future<List<Book>> books;
   final bool hasSearched;
+  final VoidCallback onBookChange;
 
   const SearchBooksList({
     Key? key,
     required this.books,
     required this.hasSearched,
+    required this.onBookChange,
   }) : super(key: key);
-
-  @override
-  _SearchBooksListState createState() => _SearchBooksListState();
-}
-
-class _SearchBooksListState extends State<SearchBooksList> {
-  late Future<List<Book>> _books;
-
-  @override
-  void initState() {
-    super.initState();
-    _books = widget.books;
-  }
-
-  void _refreshBooks() {
-    setState(() {
-      _books = DatabaseHelper().books();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return BooksList(
-      booksFuture: _books,
-      hasSearched: widget.hasSearched,
-      onBookChange: _refreshBooks,
+      booksFuture: books,
+      hasSearched: hasSearched,
+      onBookChange: onBookChange,
     );
   }
 }

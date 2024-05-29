@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/services/api.dart';
 import 'package:libreria/widgets/books_list.dart';
-import 'package:libreria/widgets/search_bar.dart';
 import 'package:libreria/services/camera.dart';
 
 class SearchPage extends StatefulWidget {
@@ -19,30 +18,59 @@ class _SearchPageState extends State<SearchPage> {
   bool _hasSearched = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          MySearchBar(
-            controller: _controller,
-            onSearch: () {
-              search(_controller.text);
-              setState(() {
-                _hasSearched = true;
-              });
-            },
-            onScan: () => scanBarcode(context),
-            searchByTitle: _searchByTitle,
-            onSearchModeChanged: (value) {
-              setState(() {
-                _searchByTitle = value;
-              });
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _controller.text.isEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.camera_alt),
+                        onPressed: () => scanBarcode(context),
+                      )
+                    : IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: _search,
+                      ),
+                hintText: 'Search',
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (text) {
+                setState(() {});
+              },
+              onSubmitted: (String title) {
+                _search();
+              },
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            color: Theme.of(context).focusColor,
+            child: Row(
+              children: [
+                const Text(
+                  'Search by title',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                Switch(
+                  value: _searchByTitle,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchByTitle = value;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: _books == null
@@ -50,6 +78,7 @@ class _SearchPageState extends State<SearchPage> {
                 : SearchBooksList(
                     books: _books!,
                     hasSearched: _hasSearched,
+                    onBookChange: _refreshBooks,
                   ),
           ),
         ],
@@ -57,9 +86,16 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void search(String title) {
+  void _search() {
     setState(() {
-      _books = searchBooks(title, _searchByTitle);
+      _hasSearched = true;
+      _books = searchBooks(_controller.text, _searchByTitle);
+    });
+  }
+
+  void _refreshBooks() {
+    setState(() {
+      _books = searchBooks(_controller.text, _searchByTitle);
     });
   }
 }
