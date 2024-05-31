@@ -5,8 +5,13 @@ import 'package:libreria/widgets/book_detail.dart';
 
 class BookDetailsPage extends StatefulWidget {
   final Future<Book> bookFuture;
+  final VoidCallback onBookChange;
 
-  const BookDetailsPage({Key? key, required this.bookFuture}) : super(key: key);
+  const BookDetailsPage({
+    Key? key,
+    required this.bookFuture,
+    required this.onBookChange,
+  }) : super(key: key);
 
   @override
   _BookDetailsPageState createState() => _BookDetailsPageState();
@@ -47,6 +52,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
     setState(() {
       isInLibrary = true;
     });
+    widget.onBookChange();
   }
 
   Future<void> _removeFromLibrary(Book book) async {
@@ -54,6 +60,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
     setState(() {
       isInLibrary = false;
     });
+    widget.onBookChange();
   }
 
   @override
@@ -124,6 +131,8 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                                   book.isFavorite = isFavorite;
                                   _databaseHelper.updateBook(book);
                                 });
+                                widget
+                                    .onBookChange();
                               },
                             ),
                             ElevatedButton(

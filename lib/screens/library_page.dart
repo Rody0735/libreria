@@ -66,11 +66,13 @@ class _LibraryPageState extends State<LibraryPage> {
     });
   }
 
-  void _onSortOrderChanged(String value) {
-    setState(() {
-      _sortOrder = value;
-      _fetchBooks();
-    });
+  void _onSortOrderChanged(String? value) {
+    if (value != null) {
+      setState(() {
+        _sortOrder = value;
+        _fetchBooks();
+      });
+    }
   }
 
   void _onBookRemoved() {

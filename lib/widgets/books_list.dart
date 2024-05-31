@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:libreria/models/book.dart';
 import 'package:libreria/screens/book_detail_page.dart';
+import 'package:libreria/services/exceptions.dart';
 
 class BooksList extends StatelessWidget {
   final Future<List<Book>> booksFuture;
@@ -25,10 +26,17 @@ class BooksList extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          String errorMessage;
+          if (snapshot.error is OfflineException) {
+            errorMessage =
+                'No internet connection. Please check your connection and try again.';
+          } else {
+            errorMessage = 'Error: ${snapshot.error}';
+          }
           return Center(
             child: Text(
-              'Error: ${snapshot.error}',
-              style: const TextStyle(fontSize: 18, color: Colors.red),
+              errorMessage,
+              style: const TextStyle(fontSize: 18),
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -56,7 +64,7 @@ class BooksList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
                         key,
                         style: const TextStyle(
@@ -140,8 +148,10 @@ class BookListItem extends StatelessWidget {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      BookDetailsPage(bookFuture: Future.value(book)),
+                  builder: (context) => BookDetailsPage(
+                    bookFuture: Future.value(book),
+                    onBookChange: onBookChange,
+                  ),
                 ),
               );
               if (result == true) {

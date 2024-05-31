@@ -18,7 +18,7 @@ Future<void> scanBarcode(BuildContext context) async {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  BookDetailsPage(bookFuture: Future.value(book)),
+                  BookDetailsPage(bookFuture: Future.value(book), onBookChange: () {},),
             ),
           );
         } else {
