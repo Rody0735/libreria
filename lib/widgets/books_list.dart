@@ -49,41 +49,80 @@ class BooksList extends StatelessWidget {
         } else {
           final books = snapshot.data!;
           if (sortOrder == 'author') {
+            final noAuthorBooks = books.where((book) {
+              return book.authors == null ||
+                  book.authors!.isEmpty ||
+                  book.authors![0].trim().isEmpty;
+            }).toList();
+            final authorBooks = books.where((book) {
+              return book.authors != null &&
+                  book.authors!.isNotEmpty &&
+                  book.authors![0].trim().isNotEmpty;
+            }).toList();
+
             final groupedBooks = groupBy(
-                books,
-                (Book book) => book.authors.isNotEmpty
-                    ? book.authors[0][0].toUpperCase()
-                    : '');
+              authorBooks,
+              (Book book) => book.authors![0][0].toUpperCase(),
+            );
+
             final sortedKeys = groupedBooks.keys.toList()..sort();
+
             return ListView.builder(
-              itemCount: sortedKeys.length,
+              itemCount: sortedKeys.length + (noAuthorBooks.isNotEmpty ? 1 : 0),
               itemBuilder: (context, index) {
-                final key = sortedKeys[index];
-                final groupedBooksByKey = groupedBooks[key]!;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        key,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                if (index == 0 && noAuthorBooks.isNotEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'No Author',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    ...groupedBooksByKey.map((book) {
-                      return BookListItem(
-                        book: book,
-                        onBookChange: onBookChange,
-                      );
-                    }),
-                  ],
-                );
+                      ...noAuthorBooks.map((book) {
+                        return BookListItem(
+                          book: book,
+                          onBookChange: onBookChange,
+                        );
+                      }).toList(),
+                    ],
+                  );
+                } else {
+                  final keyIndex = noAuthorBooks.isNotEmpty ? index - 1 : index;
+                  final key = sortedKeys[keyIndex];
+                  final groupedBooksByKey = groupedBooks[key]!;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          key,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ...groupedBooksByKey.map((book) {
+                        return BookListItem(
+                          book: book,
+                          onBookChange: onBookChange,
+                        );
+                      }).toList(),
+                    ],
+                  );
+                }
               },
             );
           } else {
+            // Display books in the default order
             return ListView.builder(
               itemCount: books.length,
               itemBuilder: (context, index) {
@@ -126,12 +165,10 @@ class BookListItem extends StatelessWidget {
                       book.imageLinks!.values.first.toString(),
                       fit: BoxFit.contain,
                     )
-                  : const Center(
-                      child: Icon(
-                        Icons.book,
-                        size: 70,
-                        color: Colors.grey,
-                      ),
+                  : const Icon(
+                      Icons.book,
+                      size: 50,
+                      color: Colors.grey,
                     ),
             ),
             title: Text(
@@ -140,7 +177,7 @@ class BookListItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              book.authors.join(', '),
+              book.authors?.join(', ') ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

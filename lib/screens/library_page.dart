@@ -29,7 +29,7 @@ class _LibraryPageState extends State<LibraryPage> {
                       .toLowerCase()
                       .contains(_searchQuery.toLowerCase()) ||
                   book.authors
-                      .join(', ')
+                      !.join(', ')
                       .toLowerCase()
                       .contains(_searchQuery.toLowerCase()))
               .toList();
@@ -49,8 +49,11 @@ class _LibraryPageState extends State<LibraryPage> {
         books.sort((a, b) => b.title.compareTo(a.title));
         break;
       case 'author':
-        books.sort(
-            (a, b) => a.authors.join(', ').compareTo(b.authors.join(', ')));
+        books.sort((a, b) => a.authors == null
+            ? -1
+            : b.authors == null
+                ? 1
+                : a.authors!.join(', ').compareTo(b.authors!.join(', ')));
         break;
       case 'favorites':
         books.sort(

@@ -3,7 +3,7 @@ class Book {
     required this.id,
     required this.title,
     this.subtitle = '',
-    required this.authors,
+    this.authors,
     this.imageLinks,
     this.description = '',
     this.pageCount = 0,
@@ -13,7 +13,7 @@ class Book {
   final String id;
   final String title;
   final String subtitle;
-  final List<String> authors;
+  final List<String>? authors;
   final Map<String, Uri>? imageLinks;
   final String description;
   final int pageCount;
@@ -26,9 +26,8 @@ class Book {
       title: volumeInfo['title'] as String? ?? '',
       subtitle: volumeInfo['subtitle'] as String? ?? '',
       authors: (volumeInfo['authors'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+          ?.map((e) => e as String)
+          .toList(),
       imageLinks: (volumeInfo['imageLinks'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, Uri.parse(e as String)),
       ),
@@ -44,7 +43,9 @@ class Book {
       id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
-      authors: (json['authors'] as String).split(','),
+      authors: (json['authors'] as String).isNotEmpty
+          ? (json['authors'] as String).split(',')
+          : null,
       imageLinks: json['imageLinks'] != null
           ? (json['imageLinks'] as String)
               .split(',')
@@ -61,7 +62,7 @@ class Book {
         'id': id,
         'title': title,
         'subtitle': subtitle,
-        'authors': authors.join(','),
+        'authors': authors?.join(',') ?? '',
         'imageLinks': imageLinks?.values.map((uri) => uri.toString()).join(','),
         'description': description,
         'pageCount': pageCount,
