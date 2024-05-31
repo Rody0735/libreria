@@ -27,6 +27,8 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
   void initState() {
     super.initState();
     _bookFuture = widget.bookFuture;
+    isFavorite = false;
+    isInLibrary = false;
     _checkIfInLibrary();
     _checkIfFavorite();
   }
