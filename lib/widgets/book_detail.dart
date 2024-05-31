@@ -16,24 +16,36 @@ Widget bookDetail(Book book) {
         ),
       const SizedBox(height: 8),
       Text(
-        'Autore: ${book.authors.join(', ')}',
+        'Author: ${book.authors.join(', ')}',
         style: const TextStyle(fontSize: 16),
       ),
-      if (book.imageLinks != null)
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Image.network(
-            book.imageLinks!.values.first.toString(),
-            height: 200,
-          ),
+      const SizedBox(height: 16),
+      SizedBox(
+        height: 200,
+        child: book.imageLinks != null
+            ? Image.network(
+                book.imageLinks!.values.first.toString(),
+                fit: BoxFit.cover,
+              )
+            : Container(
+                color: Colors.grey[200],
+                child: const Center(child: Icon(Icons.image, size: 50)),
+              ),
+      ),
+      const SizedBox(height: 16),
+      if (book.description.isNotEmpty)
+        Text(
+          book.description,
+          style: const TextStyle(fontSize: 16),
+        )
+      else
+        const Text(
+          'No description available',
+          style: TextStyle(fontSize: 16),
         ),
-      Text(
-        book.description,
-        style: const TextStyle(fontSize: 16),
-      ),
       const SizedBox(height: 8),
       Text(
-        'Pagine: ${book.pageCount}',
+        'Number of Pages: ${book.pageCount}',
         style: const TextStyle(fontSize: 16),
       ),
       const SizedBox(height: 16),
