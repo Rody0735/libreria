@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Library App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -59,9 +60,11 @@ class MainPage extends StatefulWidget {
   final VoidCallback toggleTheme;
   final bool isDarkTheme;
 
-  const MainPage(
-      {Key? key, required this.toggleTheme, required this.isDarkTheme})
-      : super(key: key);
+  const MainPage({
+    Key? key,
+    required this.toggleTheme,
+    required this.isDarkTheme,
+  }) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -118,9 +121,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(_selectedIndex == 1 ? 'Library' : 'Search'),
-        ),
+        title: Text(_selectedIndex == 1 ? 'Library' : 'Search'),
+        centerTitle: true,
         actions: [
           SettingsMenu(
             toggleTheme: widget.toggleTheme,
