@@ -6,7 +6,6 @@ import 'package:libreria/services/exceptions.dart';
 
 class BooksList extends StatelessWidget {
   final Future<List<Book>> booksFuture;
-  final bool? hasSearched;
   final String? sortOrder;
   final VoidCallback onBookChange;
 
@@ -14,7 +13,6 @@ class BooksList extends StatelessWidget {
     Key? key,
     required this.booksFuture,
     required this.onBookChange,
-    this.hasSearched,
     this.sortOrder,
   }) : super(key: key);
 

@@ -4,8 +4,16 @@ import 'package:libreria/services/database_helper.dart';
 import 'package:libreria/widgets/books_list.dart';
 
 class LibraryPage extends StatefulWidget {
+  final GlobalKey<_LibraryPageState> key = GlobalKey<_LibraryPageState>();
+
+  LibraryPage({Key? key}) : super(key: key);
+
   @override
   _LibraryPageState createState() => _LibraryPageState();
+
+  void clearBooks() {
+    key.currentState?.clearBooks();
+  }
 }
 
 class _LibraryPageState extends State<LibraryPage> {
@@ -28,8 +36,8 @@ class _LibraryPageState extends State<LibraryPage> {
                   book.title
                       .toLowerCase()
                       .contains(_searchQuery.toLowerCase()) ||
-                  book.authors
-                      !.join(', ')
+                  book.authors!
+                      .join(', ')
                       .toLowerCase()
                       .contains(_searchQuery.toLowerCase()))
               .toList();
@@ -80,6 +88,12 @@ class _LibraryPageState extends State<LibraryPage> {
 
   void _onBookRemoved() {
     _fetchBooks();
+  }
+
+  void clearBooks() {
+    setState(() {
+      _books = Future.value([]);
+    });
   }
 
   @override

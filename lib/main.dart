@@ -74,6 +74,8 @@ class _MainPageState extends State<MainPage> {
   final PageController _pageController = PageController(initialPage: 1);
   int _selectedIndex = 1;
 
+  final LibraryPage _libraryPage = LibraryPage();
+
   void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
@@ -96,6 +98,7 @@ class _MainPageState extends State<MainPage> {
               onPressed: () async {
                 await DatabaseHelper().clearDatabase();
                 Navigator.of(context).pop();
+                _libraryPage.clearBooks();
               },
               child: const Text('Yes'),
             ),
@@ -136,7 +139,7 @@ class _MainPageState extends State<MainPage> {
         onPageChanged: _onPageChanged,
         children: [
           SearchPage(),
-          LibraryPage(),
+          _libraryPage,
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
