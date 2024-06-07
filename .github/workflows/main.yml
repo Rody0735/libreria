@@ -25,9 +25,37 @@ jobs:
       - name: Get Flutter packages
         run: flutter pub get
 
-      - name: Run Flutter tests
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Prepare Android Emulator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lib32stdc++6 qemu-kvm
+          sudo adduser $USER kvm
+          sudo chown $USER:$USER /dev/kvm
+          sdkmanager --install "system-images;android-30;google_apis;x86_64"
+          echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
+
+      - name: Start Emulator
+        run: |
+          $ANDROID_HOME/emulator/emulator-headless -avd test -no-audio -no-window &
+          adb wait-for-device
+          adb shell settings put global window_animation_scale 0.0
+          adb shell settings put global transition_animation_scale 0.0
+          adb shell settings put global animator_duration_scale 0.0
+
+      - name: Wait for Android Emulator to be ready
+        run: |
+          adb shell getprop init.svc.bootanim | grep -m 1 stopped
+          sleep 30
+
+      - name: Run Flutter integration tests
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+
+      - name: Run Flutter unit tests
         run: flutter test
-        
+
       - name: Build Flutter app
         run: flutter build apk
 
@@ -35,9 +63,7 @@ jobs:
         run: dart pub get
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: app-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/app-relase.apk
-
-    
+          path: build/app/outputs/flutter-apk/app-release.apk
