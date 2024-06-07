@@ -32,7 +32,6 @@ void main() {
     );
 
     // Aggiungi log per debugging
-
     expect(libraryIconFinder, findsOneWidget);
     expect(searchIconFinder, findsOneWidget);
 
@@ -60,7 +59,6 @@ void main() {
     await tester.pumpAndSettle();
 
     // Debug aggiuntivo per la pagina della libreria
-
     expect(find.byType(BookListItem), findsNothing);
 
     // Verifica se siamo tornati alla pagina della libreria

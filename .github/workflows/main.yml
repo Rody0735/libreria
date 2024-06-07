@@ -29,27 +29,9 @@ jobs:
         run: flutter test
 
       - name: Run integration tests
-        run: |
-          # Avvia l'emulatore Android
-          sudo $ANDROID_SDK_ROOT/emulator/emulator -avd test -no-snapshot -no-audio -no-window &
-          EMULATOR_PID=$!
-          # Attendi che l'emulatore sia avviato
-          flutter emulators --launch test
-          flutter devices
-          # Avvia l'applicazione in modalità debug
-          flutter run --machine --target test_driver/integration_test.dart --device-id emulator-5554 > log.txt 2>&1 &
-          FLUTTER_PID=$!
-          # Attendi un po' per assicurarti che l'applicazione sia avviata
-          sleep 30
-          # Ottieni l'URL del servizio VM dai log
-          VM_SERVICE_URL=$(grep -o 'http://127.0.0.1:[0-9]*/' log.txt)
-          echo "VM_SERVICE_URL=$VM_SERVICE_URL" >> $GITHUB_ENV
-          # Esegui i test di integrazione
-          flutter drive --target=test_driver/integration_test.dart
-          # Termina l'applicazione Flutter
-          kill $FLUTTER_PID
-          # Termina l'emulatore
-          kill $EMULATOR_PID
+        run: flutter test integration_test
+        env:
+          VM_SERVICE_URL: http://127.0.0.1:12345/
 
       - name: Build Flutter app for release
         run: flutter build apk --release
