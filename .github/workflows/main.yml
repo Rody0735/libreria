@@ -25,8 +25,20 @@ jobs:
       - name: Get Flutter packages
         run: flutter pub get
 
-      - name: Run Flutter tests
+      - name: Run unit tests
         run: flutter test
+
+      - name: Build Flutter app for testing
+        run: flutter build apk --debug
+
+      - name: Start Flutter driver server
+        run: |
+          nohup flutter drive \
+          --driver=test/test_driver/integration_test.dart \
+          --target=test_driver/app.dart &
+
+      - name: Run Flutter integration tests
+        run: flutter test integration_test/app_test.dart
 
       - name: Build Flutter app for release
         run: flutter build apk --release
