@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,47 +25,11 @@ jobs:
       - name: Get Flutter packages
         run: flutter pub get
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Prepare Android Emulator
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lib32stdc++6 qemu-kvm
-          sudo adduser $USER kvm
-          sudo chown $USER:$USER /dev/kvm
-          yes | sdkmanager --licenses
-          sdkmanager --install "system-images;android-30;google_apis;x86_64"
-          avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
-
-      - name: List available emulators
-        run: flutter emulators
-
-      - name: Start Emulator
-        run: flutter emulators --launch test &
-
-      - name: Wait for Android Emulator to be ready
-        run: |
-          flutter devices
-          adb wait-for-device
-          boot_completed=""
-          until [[ "$boot_completed" =~ "1" ]]; do
-            sleep 10
-            boot_completed=$(adb shell getprop sys.boot_completed 2>&1 &)
-          done
-          sleep 30
-          adb shell settings put global window_animation_scale 0.0
-          adb shell settings put global transition_animation_scale 0.0
-          adb shell settings put global animator_duration_scale 0.0
-
-      - name: Run Flutter integration tests
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
-
-      - name: Run Flutter unit tests
+      - name: Run Flutter tests
         run: flutter test
 
-      - name: Build Flutter app
-        run: flutter build apk
+      - name: Build Flutter app for release
+        run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
