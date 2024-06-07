@@ -29,7 +29,7 @@ jobs:
         run: flutter test
 
       - name: Run integration tests
-        run: flutter test integration_test
+        run: flutter test integration_test -d linux
         env:
           VM_SERVICE_URL: http://127.0.0.1:12345/
 
