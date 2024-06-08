@@ -35,9 +35,7 @@ jobs:
         run: flutter test
 
       - name: Run integration tests
-        run: flutter test integration_test -d linux
-        env:
-          VM_SERVICE_URL: http://127.0.0.1:12345/
+        run: flutter drive --driver=test/test_driver/integration_test.dart --target=integration_test/app_test.dart --profile --no-dds
 
       - name: Build Flutter app for release
         run: flutter build apk --release
