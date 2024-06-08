@@ -35,7 +35,7 @@ jobs:
         run: flutter test
 
       - name: Run integration tests
-        run: flutter drive --driver=test/test_driver/integration_test.dart --target=integration_test/app_test.dart --profile --no-dds
+        run: flutter integration_test/app_test.dart -d linux
 
       - name: Build Flutter app for release
         run: flutter build apk --release

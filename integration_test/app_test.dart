@@ -31,7 +31,6 @@ void main() {
       matching: find.byIcon(Icons.search),
     );
 
-    // Aggiungi log per debugging
     expect(libraryIconFinder, findsOneWidget);
     expect(searchIconFinder, findsOneWidget);
 
@@ -44,21 +43,19 @@ void main() {
 
     // Scrivi qualcosa nella barra di ricerca
     await tester.enterText(find.byType(TextField), 'Test book');
-    await tester.pump(); // Aggiungi un pump qui
-
-    // Debug per verificare la presenza dell'icona send
-    expect(find.byIcon(Icons.send), findsOneWidget);
-
-    await tester.tap(find.byIcon(Icons.send));
     await tester.pumpAndSettle();
 
-    // Debug aggiuntivo dopo invio ricerca
+    // Debug per verificare la presenza dell'icona send
+    final sendIconFinder = find.byIcon(Icons.send);
+    expect(sendIconFinder, findsOneWidget);
+
+    await tester.tap(sendIconFinder);
+    await tester.pumpAndSettle();
 
     // Torna alla pagina della libreria
     await tester.tap(libraryIconFinder);
     await tester.pumpAndSettle();
 
-    // Debug aggiuntivo per la pagina della libreria
     expect(find.byType(BookListItem), findsNothing);
 
     // Verifica se siamo tornati alla pagina della libreria
