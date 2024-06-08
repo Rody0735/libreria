@@ -14,6 +14,7 @@ void main() {
   });
 
   testWidgets('Integration test: Search and Library pages', (WidgetTester tester) async {
+    print('Starting test...');
     await tester.pumpWidget(MyApp());
 
     // Verifica se siamo sulla pagina principale
@@ -31,12 +32,15 @@ void main() {
       matching: find.byIcon(Icons.search),
     );
 
+    print('Found libraryIconFinder: ${libraryIconFinder.evaluate().isNotEmpty}');
+    print('Found searchIconFinder: ${searchIconFinder.evaluate().isNotEmpty}');
     expect(libraryIconFinder, findsOneWidget);
     expect(searchIconFinder, findsOneWidget);
 
     // Vai alla pagina di ricerca
     await tester.tap(searchIconFinder);
     await tester.pumpAndSettle();
+    print('Navigated to search page');
 
     // Debug aggiuntivo per capire se siamo sulla pagina di ricerca
     expect(find.byIcon(Icons.camera_alt), findsOneWidget);
@@ -44,6 +48,7 @@ void main() {
     // Scrivi qualcosa nella barra di ricerca
     await tester.enterText(find.byType(TextField), 'Test book');
     await tester.pumpAndSettle();
+    print('Entered text in search field');
 
     // Debug per verificare la presenza dell'icona send
     final sendIconFinder = find.byIcon(Icons.send);
@@ -51,10 +56,12 @@ void main() {
 
     await tester.tap(sendIconFinder);
     await tester.pumpAndSettle();
+    print('Tapped send icon');
 
     // Torna alla pagina della libreria
     await tester.tap(libraryIconFinder);
     await tester.pumpAndSettle();
+    print('Navigated back to library page');
 
     expect(find.byType(BookListItem), findsNothing);
 
@@ -63,12 +70,15 @@ void main() {
 
     // Aggiungi una pausa forzata per assicurarti che tutto sia renderizzato
     await tester.pump(Duration(seconds: 1));
+    print('Waited for rendering');
 
     // Aggiungi un controllo di visibilità
     final libraryIconVisible = libraryIconFinder.evaluate().isNotEmpty && libraryIconFinder.evaluate().first.renderObject!.attached;
     expect(libraryIconVisible, true);
+    print('Library icon is visible: $libraryIconVisible');
 
     await tester.tap(libraryIconFinder);
     await tester.pumpAndSettle();
+    print('Tapped library icon');
   });
 }
