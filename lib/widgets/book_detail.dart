@@ -19,7 +19,7 @@ Widget bookDetail(Book book) {
           ),
         const SizedBox(height: 8),
         Text(
-          'Author: ${book.authors?.join(', ')}',
+          'Author: ${book.authors != null ? book.authors?.join(', ') : 'No Author'}',
           style: const TextStyle(fontSize: 16),
         ),
         const SizedBox(height: 16),

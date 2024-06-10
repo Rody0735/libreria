@@ -35,6 +35,7 @@ class BooksList extends StatelessWidget {
             child: Text(
               errorMessage,
               style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -162,6 +163,13 @@ class BookListItem extends StatelessWidget {
                   ? Image.network(
                       book.imageLinks!.values.first.toString(),
                       fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.book,
+                          size: 50,
+                          color: Colors.grey,
+                        );
+                      },
                     )
                   : const Icon(
                       Icons.book,
