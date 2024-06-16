@@ -21,6 +21,26 @@ class _MyAppState extends State<MyApp> {
   bool _isDarkTheme = false;
 
   @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  Future<void> _loadTheme() async {
+    String? theme = await DatabaseHelper().getPreference('theme');
+    setState(() {
+      _isDarkTheme = theme == 'dark';
+    });
+  }
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkTheme = !_isDarkTheme;
+      DatabaseHelper().setPreference('theme', _isDarkTheme ? 'dark' : 'light');
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -45,11 +65,7 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _isDarkTheme ? ThemeMode.dark : ThemeMode.light,
       home: MainPage(
-        toggleTheme: () {
-          setState(() {
-            _isDarkTheme = !_isDarkTheme;
-          });
-        },
+        toggleTheme: _toggleTheme,
         isDarkTheme: _isDarkTheme,
       ),
     );

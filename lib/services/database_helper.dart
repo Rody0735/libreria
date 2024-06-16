@@ -26,8 +26,7 @@ class DatabaseHelper {
     return await openDatabase(
       path,
       onCreate: (db, version) {
-        print("Creating database table...");
-        return db.execute(
+        db.execute(
           'CREATE TABLE books('
           'id TEXT PRIMARY KEY, '
           'title TEXT, '
@@ -38,8 +37,22 @@ class DatabaseHelper {
           'pageCount INTEGER, '
           'isFavorite INTEGER)',
         );
+        db.execute(
+          'CREATE TABLE preferences('
+          'key TEXT PRIMARY KEY, '
+          'value TEXT)',
+        );
       },
-      version: 1,
+      version: 2,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            'CREATE TABLE IF NOT EXISTS preferences('
+            'key TEXT PRIMARY KEY, '
+            'value TEXT)',
+          );
+        }
+      },
     );
   }
 
@@ -80,5 +93,27 @@ class DatabaseHelper {
   Future<void> clearDatabase() async {
     final db = await database;
     await db.delete('books');
+  }
+
+  Future<void> setPreference(String key, String value) async {
+    final db = await database;
+    await db.insert(
+      'preferences',
+      {'key': key, 'value': value},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<String?> getPreference(String key) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'preferences',
+      where: 'key = ?',
+      whereArgs: [key],
+    );
+    if (maps.isNotEmpty) {
+      return maps.first['value'];
+    }
+    return null;
   }
 }
